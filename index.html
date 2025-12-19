@@ -8,6 +8,10 @@
     <script> tailwind.config = { darkMode: 'class' } </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+</script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .transition-node { transition: all 0.3s ease; }
