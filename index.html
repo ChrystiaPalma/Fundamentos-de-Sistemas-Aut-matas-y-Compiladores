@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundamentos de Sistemas: Sistemas Autmatas y Compiladores</title>
+    <title>Fundamentos de Sistemas: Sistemas Autómatas y Compiladores</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { darkMode: 'class' } </script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -18,10 +18,13 @@
         .token-box { transition: all 0.2s; }
         .token-box:hover { transform: translateY(-2px); }
         
-        /* Scrollbar personalizada para la tabla */
+        /* Scrollbar personalizada */
         .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.5); border-radius: 4px; }
+
+        /* Ajuste para centrar Mermaid */
+        .mermaid { display: flex; justify-content: center; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
@@ -33,15 +36,14 @@
                     <div class="bg-blue-600 p-1.5 rounded-lg text-white group-hover:bg-blue-700 transition">
                         <i data-lucide="cpu" class="w-6 h-6"></i>
                     </div>
-                    <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">IS<span class="text-blue-600">Fundamentos de Sistemas: Sistemas Autmatas y Compiladores</span></span>
+                    <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">IS<span class="text-blue-600">Fundamentos</span></span>
                 </a>
                 
                 <div class="flex items-center gap-6">
                     <div class="hidden md:flex space-x-1 text-sm font-medium bg-slate-100 dark:bg-slate-800 p-1 rounded-full">
-                        <a href="index.html" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-700 shadow-sm text-blue-700 dark:text-blue-300 font-bold transition">Inicio</a>
-                        <a href="lenguajes.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Lenguajes</a>
-                        <a href="automatas.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Autómatas</a>
-                        <a href="compiladores.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Compiladores</a>
+                        <a href="#" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-700 shadow-sm text-blue-700 dark:text-blue-300 font-bold transition">Inicio</a>
+                        <a href="#simulador" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Autómatas</a>
+                        <a href="#compiladores" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Compiladores</a>
                     </div>
                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
                         <i data-lucide="sun" class="hidden dark:block text-yellow-400 w-5 h-5"></i>
@@ -67,8 +69,8 @@
                 <a href="#simulador" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-bold shadow-lg shadow-blue-900/50 hover:-translate-y-1 transition flex items-center justify-center gap-2">
                     <i data-lucide="play-circle" class="w-5 h-5"></i> Probar Simulador
                 </a>
-                <a href="lenguajes.html" class="bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
-                    <i data-lucide="book-open" class="w-5 h-5"></i> Comenzar Curso
+                <a href="#compiladores" class="bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                    <i data-lucide="book-open" class="w-5 h-5"></i> Ver Compiladores
                 </a>
             </div>
         </div>
@@ -78,24 +80,21 @@
 
         <section>
             <div class="grid md:grid-cols-3 gap-8">
-                <a href="lenguajes.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-blue-500"></i></div>
+                <div class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-500/50 transition duration-300">
                     <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="languages" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">I. Lenguajes Formales</h3>
                     <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Entiende la sintaxis estricta, alfabetos y la Jerarquía de Chomsky.</p>
-                </a>
-                <a href="automatas.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-purple-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-purple-500"></i></div>
+                </div>
+                <div class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-purple-500/50 transition duration-300">
                     <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="bot" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">II. Autómatas</h3>
                     <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Desde máquinas de estado finito hasta la Máquina de Turing.</p>
-                </a>
-                <a href="compiladores.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-emerald-500"></i></div>
+                </div>
+                <div class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-500/50 transition duration-300">
                     <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="code-2" class="w-7 h-7 text-emerald-600 dark:text-emerald-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">III. Compiladores</h3>
                     <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Ingeniería detrás de la traducción de código: Lexer, Parser y AST.</p>
-                </a>
+                </div>
             </div>
         </section>
 
@@ -143,10 +142,90 @@
             </div>
         </section>
 
-        <section class="mb-20">
+        <section id="compiladores" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Ingeniería de Software</span>
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Arquitectura de un Compilador</h2>
+                <p class="text-slate-500 dark:text-slate-400 mt-2">Flujo de transformación desde código fuente hasta binario ejecutable.</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-12 overflow-x-auto">
+                <div class="mermaid">
+                    graph TD
+                    SRC[Código Fuente] --> LEX[1. Léxico / Scanner]
+                    LEX -->|Tokens| PAR[2. Sintáctico / Parser]
+                    PAR -->|AST| SEM[3. Semántico]
+                    SEM -->|AST Validado| IR[4. Código Intermedio]
+                    IR --> OPT[5. Optimización]
+                    OPT --> GEN[6. Código Objeto]
+                    GEN --> EXE[Ejecutable / Binario]
+
+                    style SRC fill:#f8fafc,stroke:#94a3b8,color:#334155
+                    style LEX fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style PAR fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style SEM fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style IR fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style OPT fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style GEN fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style EXE fill:#1e293b,stroke:#333,color:#fff
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mb-20">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+                            <tr>
+                                <th class="px-6 py-4">Fase</th>
+                                <th class="px-6 py-4">Entrada</th>
+                                <th class="px-6 py-4">Salida</th>
+                                <th class="px-6 py-4">Descripción Técnica</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">1. Análisis Léxico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código Fuente</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Tokens</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Divide la cadena de caracteres en unidades lógicas (palabras clave, identificadores).</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">2. Análisis Sintáctico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Tokens</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Árbol (AST)</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Verifica la estructura gramatical y construye la jerarquía lógica del programa.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">3. Análisis Semántico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">AST Validado</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Comprueba la coherencia de tipos, variables declaradas y reglas de ámbito.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">4. Cód. Intermedio</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST Validado</td>
+                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">Código IR</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Genera una representación abstracta independiente de la máquina (ej. Código de 3 direcciones).</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">5. Optimización</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código IR</td>
+                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">IR Optimizado</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Mejora el rendimiento eliminando código muerto y reduciendo operaciones costosas.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">6. Cód. Objeto</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">IR Optimizado</td>
+                                <td class="px-6 py-4 text-slate-900 dark:text-white font-mono text-xs font-bold">Binario / ASM</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Traduce el código intermedio al lenguaje máquina específico del procesador.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="text-center mb-8">
-                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Compiladores</span>
-                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Scanner Léxico</h2>
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Scanner Léxico Interactivo</h2>
             </div>
             
             <div class="bg-slate-900 rounded-xl shadow-2xl overflow-hidden max-w-6xl mx-auto border border-slate-700">
@@ -236,6 +315,11 @@
         </div>
     </footer>
 
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base' });
+    </script>
+
     <script>
         lucide.createIcons();
         
@@ -296,7 +380,7 @@
             document.getElementById(`text-${stateId}`).classList.add('active-text');
         }
 
-        // --- ACTUALIZACIÓN CLAVE: LÓGICA DEL TOKENIZADOR MEJORADA ---
+        // Tokenizer Logic
         function tokenize() {
             const input = document.getElementById('compiler-input').value;
             const output = document.getElementById('token-output');
@@ -304,7 +388,6 @@
 
             const patterns = [
                 { type: 'KEYWORD', regex: /^(int|float|return|if|else|void)\b/, color: 'bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/50 dark:text-purple-300 dark:border-purple-700' },
-                // Orden importa: comparar >= antes de > para evitar falsos positivos
                 { type: 'CMP', regex: /^(<=|>=|==|<|>)/, color: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-700' },
                 { type: 'ID', regex: /^[a-zA-Z_][a-zA-Z0-9_]*/, color: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-700' },
                 { type: 'NUMBER', regex: /^\d+/, color: 'bg-orange-100 text-orange-700 border-orange-300 dark:bg-orange-900/50 dark:text-orange-300 dark:border-orange-700' },
