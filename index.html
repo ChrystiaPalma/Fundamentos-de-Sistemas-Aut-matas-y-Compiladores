@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fundamentos de Sistemas: Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script> tailwind.config = { darkMode: 'class' } </script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
 </script>
+    <script> tailwind.config = { darkMode: 'class' } </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+    </script>
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         .transition-node { transition: all 0.3s ease; }
@@ -21,6 +27,14 @@
         .dark .active-text { fill: white; }
         .token-box { transition: all 0.2s; }
         .token-box:hover { transform: translateY(-2px); }
+        
+        /* Estilo para centrar el diagrama Mermaid */
+        .mermaid { display: flex; justify-content: center; }
+        
+        /* Scrollbar personalizada */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.5); border-radius: 4px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
@@ -38,9 +52,8 @@
                 <div class="flex items-center gap-6">
                     <div class="hidden md:flex space-x-1 text-sm font-medium bg-slate-100 dark:bg-slate-800 p-1 rounded-full">
                         <a href="index.html" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-700 shadow-sm text-blue-700 dark:text-blue-300 font-bold transition">Inicio</a>
-                        <a href="lenguajes.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Lenguajes</a>
-                        <a href="automatas.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Autómatas</a>
-                        <a href="compiladores.html" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Compiladores</a>
+                        <a href="#simulador" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Autómatas</a>
+                        <a href="#compiladores" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Compiladores</a>
                     </div>
                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
                         <i data-lucide="sun" class="hidden dark:block text-yellow-400 w-5 h-5"></i>
@@ -54,7 +67,6 @@
     <header class="relative overflow-hidden bg-slate-900 text-white py-24 px-4 text-center">
         <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
         <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600 via-indigo-900 to-slate-900 opacity-90"></div>
-        
         <div class="relative z-10 max-w-4xl mx-auto">
             <span class="inline-block py-1 px-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-wider uppercase mb-4">Ingeniería en Sistemas</span>
             <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
@@ -67,7 +79,7 @@
                 <a href="#simulador" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-bold shadow-lg shadow-blue-900/50 hover:-translate-y-1 transition flex items-center justify-center gap-2">
                     <i data-lucide="play-circle" class="w-5 h-5"></i> Probar Simulador
                 </a>
-                <a href="lenguajes.html" class="bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
+                <a href="#compiladores" class="bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
                     <i data-lucide="book-open" class="w-5 h-5"></i> Comenzar Curso
                 </a>
             </div>
@@ -79,42 +91,22 @@
         <section>
             <div class="grid md:grid-cols-3 gap-8">
                 <a href="lenguajes.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500">
-                        <i data-lucide="arrow-up-right" class="w-6 h-6 text-blue-500"></i>
-                    </div>
-                    <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
-                        <i data-lucide="languages" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i>
-                    </div>
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-blue-500"></i></div>
+                    <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="languages" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">I. Lenguajes Formales</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        Entiende la sintaxis estricta, alfabetos y la Jerarquía de Chomsky que estructura la comunicación hombre-máquina.
-                    </p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Entiende la sintaxis estricta, alfabetos y la Jerarquía de Chomsky.</p>
                 </a>
-
                 <a href="automatas.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-purple-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500">
-                        <i data-lucide="arrow-up-right" class="w-6 h-6 text-purple-500"></i>
-                    </div>
-                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
-                        <i data-lucide="bot" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i>
-                    </div>
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-purple-500"></i></div>
+                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="bot" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">II. Autómatas</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        Desde máquinas de estado finito hasta la Máquina de Turing. Descubre cómo se procesan las cadenas de datos.
-                    </p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Desde máquinas de estado finito hasta la Máquina de Turing.</p>
                 </a>
-
                 <a href="compiladores.html" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500">
-                        <i data-lucide="arrow-up-right" class="w-6 h-6 text-emerald-500"></i>
-                    </div>
-                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
-                        <i data-lucide="code-2" class="w-7 h-7 text-emerald-600 dark:text-emerald-400"></i>
-                    </div>
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-emerald-500"></i></div>
+                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="code-2" class="w-7 h-7 text-emerald-600 dark:text-emerald-400"></i></div>
                     <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">III. Compiladores</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        La ingeniería detrás de la traducción de código: Lexer, Parser, AST y generación de código máquina.
-                    </p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Ingeniería detrás de la traducción de código: Lexer, Parser y AST.</p>
                 </a>
             </div>
         </section>
@@ -124,55 +116,35 @@
                 <div class="flex flex-col lg:flex-row">
                     <div class="lg:w-1/3 p-8 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-700">
                         <div class="flex items-center gap-2 mb-4">
-                            <span class="flex h-3 w-3 relative">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                            </span>
+                            <span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
                             <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Laboratorio Activo</span>
                         </div>
                         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Detector de Paridad</h2>
-                        <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm">
-                            Este Autómata Finito Determinista (DFA) aceptará cualquier cadena binaria que contenga un número <strong>impar</strong> de ceros.
-                        </p>
-                        
+                        <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm">Este DFA aceptará cualquier cadena binaria que contenga un número <strong>impar</strong> de ceros.</p>
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Entrada (Binario)</label>
-                                <div class="relative">
-                                    <input type="text" id="dfa-input" placeholder="Ej: 10101" class="w-full pl-4 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition">
-                                    <div class="absolute right-3 top-3 text-slate-400 text-xs">BIN</div>
-                                </div>
+                                <div class="relative"><input type="text" id="dfa-input" placeholder="Ej: 10101" class="w-full pl-4 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition"><div class="absolute right-3 top-3 text-slate-400 text-xs">BIN</div></div>
                             </div>
-                            <button onclick="runDFA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-500/30 transition flex items-center justify-center gap-2">
-                                <i data-lucide="play" class="w-4 h-4"></i> Simular Proceso
-                            </button>
-                            <div id="dfa-result" class="h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-400 border border-dashed border-slate-300 dark:border-slate-700">
-                                Esperando entrada...
-                            </div>
+                            <button onclick="runDFA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-500/30 transition flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i> Simular Proceso</button>
+                            <div id="dfa-result" class="h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-400 border border-dashed border-slate-300 dark:border-slate-700">Esperando entrada...</div>
                         </div>
                     </div>
-
                     <div class="lg:w-2/3 p-8 bg-slate-50 dark:bg-slate-900/50 rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none flex items-center justify-center relative overflow-hidden">
                         <div class="absolute inset-0" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
-                        
                         <svg width="500" height="250" viewBox="0 0 400 250" class="relative z-10 drop-shadow-xl">
                             <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" class="fill-slate-400 dark:fill-slate-500" /></marker></defs>
                             <path d="M 120 125 L 280 125" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" marker-end="url(#arrow)" />
                             <text x="200" y="115" text-anchor="middle" class="fill-slate-500 text-xs font-mono">0</text>
-                            
                             <path d="M 280 125 Q 200 180 120 125" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
                             <text x="200" y="165" text-anchor="middle" class="fill-slate-500 text-xs font-mono">0</text>
-
                             <path d="M 80 125 C 60 80, 20 80, 80 100" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" fill="none" marker-end="url(#arrow)" />
                             <text x="50" y="80" text-anchor="middle" class="fill-slate-500 text-xs font-mono">1</text>
-
                             <path d="M 320 125 C 340 80, 380 80, 320 100" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" fill="none" marker-end="url(#arrow)" />
                             <text x="350" y="80" text-anchor="middle" class="fill-slate-500 text-xs font-mono">1</text>
-
                             <circle id="node-q0" cx="100" cy="125" r="30" class="fill-white dark:fill-slate-800 stroke-slate-500 dark:stroke-slate-400 transition-node active-state shadow-sm" stroke-width="2" />
                             <text id="text-q0" x="100" y="130" text-anchor="middle" font-family="monospace" class="active-text fill-slate-800 dark:fill-slate-200 font-bold">q0</text>
                             <text x="100" y="170" text-anchor="middle" class="fill-slate-400 text-[10px] uppercase tracking-widest">Par</text>
-                            
                             <circle id="node-q1" cx="300" cy="125" r="30" class="fill-white dark:fill-slate-800 stroke-slate-500 dark:stroke-slate-400 transition-node shadow-sm" stroke-width="2" />
                             <circle cx="300" cy="125" r="24" fill="none" class="stroke-slate-500 dark:stroke-slate-400" stroke-width="1" />
                             <text id="text-q1" x="300" y="130" text-anchor="middle" font-family="monospace" class="fill-slate-800 dark:fill-slate-200 font-bold">q1</text>
@@ -183,9 +155,91 @@
             </div>
         </section>
 
+        <section id="compiladores" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Ingeniería de Software</span>
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Arquitectura de un Compilador</h2>
+                <p class="text-slate-500 dark:text-slate-400 mt-2">Flujo de transformación desde código fuente hasta binario ejecutable.</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-12 overflow-x-auto">
+                <div class="mermaid">
+                    graph TD
+                    SRC[Código Fuente] --> LEX[1. Léxico / Scanner]
+                    LEX -->|Tokens| PAR[2. Sintáctico / Parser]
+                    PAR -->|AST| SEM[3. Semántico]
+                    SEM -->|AST Validado| IR[4. Código Intermedio]
+                    IR --> OPT[5. Optimización]
+                    OPT --> GEN[6. Código Objeto]
+                    GEN --> EXE[Ejecutable / Binario]
+
+                    style SRC fill:#f8fafc,stroke:#94a3b8,color:#334155
+                    style LEX fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style PAR fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style SEM fill:#d1fae5,stroke:#059669,color:#064e3b
+                    style IR fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style OPT fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style GEN fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+                    style EXE fill:#1e293b,stroke:#333,color:#fff
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mb-20">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+                            <tr>
+                                <th class="px-6 py-4">Fase</th>
+                                <th class="px-6 py-4">Entrada</th>
+                                <th class="px-6 py-4">Salida</th>
+                                <th class="px-6 py-4">Descripción Técnica</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">1. Análisis Léxico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código Fuente</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Tokens</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Divide la cadena de caracteres en unidades lógicas (palabras clave, identificadores).</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">2. Análisis Sintáctico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Tokens</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Árbol (AST)</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Verifica la estructura gramatical y construye la jerarquía lógica del programa.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">3. Análisis Semántico</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST</td>
+                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">AST Validado</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Comprueba la coherencia de tipos, variables declaradas y reglas de ámbito.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">4. Cód. Intermedio</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST Validado</td>
+                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">Código IR</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Genera una representación abstracta independiente de la máquina (ej. Código de 3 direcciones).</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">5. Optimización</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código IR</td>
+                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">IR Optimizado</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Mejora el rendimiento eliminando código muerto y reduciendo operaciones costosas.</td>
+                            </tr>
+                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">6. Cód. Objeto</td>
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">IR Optimizado</td>
+                                <td class="px-6 py-4 text-slate-900 dark:text-white font-mono text-xs font-bold">Binario / ASM</td>
+                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Traduce el código intermedio al lenguaje máquina específico del procesador.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
         <section class="mb-20">
             <div class="text-center mb-8">
-                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Compiladores</span>
                 <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Scanner Léxico</h2>
             </div>
             
