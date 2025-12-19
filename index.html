@@ -1,438 +1,110 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundamentos de Sistemas: Sistemas Autómatas y Compiladores</title>
+    <title>Lenguajes Formales - Teoría</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { darkMode: 'class' } </script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .transition-node { transition: all 0.3s ease; }
-        .active-state { fill: #3b82f6; stroke: #1e40af; stroke-width: 3px; }
-        .active-text { fill: white; font-weight: bold; }
-        .dark .active-state { fill: #3b82f6; stroke: #93c5fd; }
-        .dark .active-text { fill: white; }
-        .token-box { transition: all 0.2s; }
-        .token-box:hover { transform: translateY(-2px); }
-        
-        /* Scrollbar personalizada para la tabla */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.5); border-radius: 4px; }
-
-        /* Centrado del diagrama Mermaid */
-        .mermaid { display: flex; justify-content: center; }
-    </style>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
-    <nav class="bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="index.html" class="flex items-center gap-2 group">
-                    <div class="bg-blue-600 p-1.5 rounded-lg text-white group-hover:bg-blue-700 transition">
-                        <i data-lucide="cpu" class="w-6 h-6"></i>
-                    </div>
-                    <span class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">IS<span class="text-blue-600">Fundamentos</span></span>
-                </a>
-                
-                <div class="flex items-center gap-6">
-                    <div class="hidden md:flex space-x-1 text-sm font-medium bg-slate-100 dark:bg-slate-800 p-1 rounded-full">
-                        <a href="#" class="px-4 py-1.5 rounded-full bg-white dark:bg-slate-700 shadow-sm text-blue-700 dark:text-blue-300 font-bold transition">Inicio</a>
-                        <a href="#simulador" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Autómatas</a>
-                        <a href="#compiladores" class="px-4 py-1.5 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">Compiladores</a>
-                    </div>
-                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
-                        <i data-lucide="sun" class="hidden dark:block text-yellow-400 w-5 h-5"></i>
-                        <i data-lucide="moon" class="block dark:hidden text-slate-600 w-5 h-5"></i>
-                    </button>
-                </div>
-            </div>
+    <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-bold">Volver al Dashboard</span>
+            </a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
         </div>
     </nav>
 
-    <header class="relative overflow-hidden bg-slate-900 text-white py-24 px-4 text-center">
-        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-600 via-indigo-900 to-slate-900 opacity-90"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="inline-block py-1 px-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold tracking-wider uppercase mb-4">Ingeniería en Sistemas</span>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
-                La Matemática detrás del <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Software</span>
-            </h1>
-            <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
-                Domina los fundamentos de Lenguajes Formales, Autómatas y Compiladores con teoría interactiva y simuladores en tiempo real.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#simulador" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-lg font-bold shadow-lg shadow-blue-900/50 hover:-translate-y-1 transition flex items-center justify-center gap-2">
-                    <i data-lucide="play-circle" class="w-5 h-5"></i> Probar Simulador
-                </a>
-                <a href="#compiladores" class="bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20 text-white px-8 py-3.5 rounded-lg font-bold transition flex items-center justify-center gap-2">
-                    <i data-lucide="book-open" class="w-5 h-5"></i> Ver Compiladores
-                </a>
-            </div>
-        </div>
-    </header>
+    <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
+        <aside class="lg:w-64 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-6 bg-white dark:bg-slate-950 hidden lg:block">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-4">Navegación</h4>
+            <nav class="space-y-1">
+                <a href="lenguajes.html" class="block px-3 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">I. Lenguajes Formales</a>
+                <a href="automatas.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">II. Autómatas</a>
+                <a href="compiladores.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">III. Compiladores</a>
+            </nav>
+        </aside>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 py-16 w-full space-y-20">
-
-        <section>
-            <div class="grid md:grid-cols-3 gap-8">
-                <a href="#" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-blue-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-blue-500"></i></div>
-                    <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="languages" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i></div>
-                    <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">I. Lenguajes Formales</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Entiende la sintaxis estricta, alfabetos y la Jerarquía de Chomsky.</p>
-                </a>
-                <a href="#simulador" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-purple-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-purple-500"></i></div>
-                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="bot" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i></div>
-                    <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">II. Autómatas</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Desde máquinas de estado finito hasta la Máquina de Turing.</p>
-                </a>
-                <a href="#compiladores" class="group relative bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-xl hover:border-emerald-500/50 transition duration-300">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition duration-500"><i data-lucide="arrow-up-right" class="w-6 h-6 text-emerald-500"></i></div>
-                    <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300"><i data-lucide="code-2" class="w-7 h-7 text-emerald-600 dark:text-emerald-400"></i></div>
-                    <h3 class="font-bold text-xl mb-3 text-slate-900 dark:text-white">III. Compiladores</h3>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">Ingeniería detrás de la traducción de código: Lexer, Parser y AST.</p>
-                </a>
-            </div>
-        </section>
-
-        <section id="simulador" class="scroll-mt-24">
-            <div class="bg-white dark:bg-slate-800 rounded-3xl p-1 shadow-lg border border-slate-200 dark:border-slate-700">
-                <div class="flex flex-col lg:flex-row">
-                    <div class="lg:w-1/3 p-8 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-700">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="flex h-3 w-3 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
-                            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Laboratorio Activo</span>
-                        </div>
-                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Detector de Paridad</h2>
-                        <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm">Este DFA aceptará cualquier cadena binaria que contenga un número <strong>impar</strong> de ceros.</p>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Entrada (Binario)</label>
-                                <div class="relative"><input type="text" id="dfa-input" placeholder="Ej: 10101" class="w-full pl-4 pr-12 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition"><div class="absolute right-3 top-3 text-slate-400 text-xs">BIN</div></div>
-                            </div>
-                            <button onclick="runDFA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-500/30 transition flex items-center justify-center gap-2"><i data-lucide="play" class="w-4 h-4"></i> Simular Proceso</button>
-                            <div id="dfa-result" class="h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-400 border border-dashed border-slate-300 dark:border-slate-700">Esperando entrada...</div>
-                        </div>
-                    </div>
-                    <div class="lg:w-2/3 p-8 bg-slate-50 dark:bg-slate-900/50 rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
-                        <svg width="500" height="250" viewBox="0 0 400 250" class="relative z-10 drop-shadow-xl">
-                            <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" class="fill-slate-400 dark:fill-slate-500" /></marker></defs>
-                            <path d="M 120 125 L 280 125" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" marker-end="url(#arrow)" />
-                            <text x="200" y="115" text-anchor="middle" class="fill-slate-500 text-xs font-mono">0</text>
-                            <path d="M 280 125 Q 200 180 120 125" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" marker-end="url(#arrow)" fill="none"/>
-                            <text x="200" y="165" text-anchor="middle" class="fill-slate-500 text-xs font-mono">0</text>
-                            <path d="M 80 125 C 60 80, 20 80, 80 100" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" fill="none" marker-end="url(#arrow)" />
-                            <text x="50" y="80" text-anchor="middle" class="fill-slate-500 text-xs font-mono">1</text>
-                            <path d="M 320 125 C 340 80, 380 80, 320 100" class="stroke-slate-400 dark:stroke-slate-500" stroke-width="2" fill="none" marker-end="url(#arrow)" />
-                            <text x="350" y="80" text-anchor="middle" class="fill-slate-500 text-xs font-mono">1</text>
-                            <circle id="node-q0" cx="100" cy="125" r="30" class="fill-white dark:fill-slate-800 stroke-slate-500 dark:stroke-slate-400 transition-node active-state shadow-sm" stroke-width="2" />
-                            <text id="text-q0" x="100" y="130" text-anchor="middle" font-family="monospace" class="active-text fill-slate-800 dark:fill-slate-200 font-bold">q0</text>
-                            <text x="100" y="170" text-anchor="middle" class="fill-slate-400 text-[10px] uppercase tracking-widest">Par</text>
-                            <circle id="node-q1" cx="300" cy="125" r="30" class="fill-white dark:fill-slate-800 stroke-slate-500 dark:stroke-slate-400 transition-node shadow-sm" stroke-width="2" />
-                            <circle cx="300" cy="125" r="24" fill="none" class="stroke-slate-500 dark:stroke-slate-400" stroke-width="1" />
-                            <text id="text-q1" x="300" y="130" text-anchor="middle" font-family="monospace" class="fill-slate-800 dark:fill-slate-200 font-bold">q1</text>
-                            <text x="300" y="170" text-anchor="middle" class="fill-slate-400 text-[10px] uppercase tracking-widest">Impar</text>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="compiladores" class="scroll-mt-24">
-            <div class="text-center mb-10">
-                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Ingeniería de Software</span>
-                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Arquitectura de un Compilador</h2>
-                <p class="text-slate-500 dark:text-slate-400 mt-2">Flujo de transformación desde código fuente hasta binario ejecutable.</p>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 mb-12 overflow-x-auto">
-                <div class="mermaid">
-                    graph TD
-                    SRC[Código Fuente] --> LEX[1. Léxico / Scanner]
-                    LEX -->|Tokens| PAR[2. Sintáctico / Parser]
-                    PAR -->|AST| SEM[3. Semántico]
-                    SEM -->|AST Validado| IR[4. Código Intermedio]
-                    IR --> OPT[5. Optimización]
-                    OPT --> GEN[6. Código Objeto]
-                    GEN --> EXE[Ejecutable / Binario]
-
-                    style SRC fill:#f8fafc,stroke:#94a3b8,color:#334155
-                    style LEX fill:#d1fae5,stroke:#059669,color:#064e3b
-                    style PAR fill:#d1fae5,stroke:#059669,color:#064e3b
-                    style SEM fill:#d1fae5,stroke:#059669,color:#064e3b
-                    style IR fill:#e0e7ff,stroke:#4f46e5,color:#312e81
-                    style OPT fill:#e0e7ff,stroke:#4f46e5,color:#312e81
-                    style GEN fill:#e0e7ff,stroke:#4f46e5,color:#312e81
-                    style EXE fill:#1e293b,stroke:#333,color:#fff
-                </div>
-            </div>
-
-            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mb-20">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
-                            <tr>
-                                <th class="px-6 py-4">Fase</th>
-                                <th class="px-6 py-4">Entrada</th>
-                                <th class="px-6 py-4">Salida</th>
-                                <th class="px-6 py-4">Descripción Técnica</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">1. Análisis Léxico</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código Fuente</td>
-                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Tokens</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Divide la cadena de caracteres en unidades lógicas (palabras clave, identificadores).</td>
-                            </tr>
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">2. Análisis Sintáctico</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Tokens</td>
-                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">Árbol (AST)</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Verifica la estructura gramatical y construye la jerarquía lógica del programa.</td>
-                            </tr>
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">3. Análisis Semántico</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST</td>
-                                <td class="px-6 py-4 text-emerald-600 dark:text-emerald-400 font-mono text-xs">AST Validado</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Comprueba la coherencia de tipos, variables declaradas y reglas de ámbito.</td>
-                            </tr>
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">4. Cód. Intermedio</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">AST Validado</td>
-                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">Código IR</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Genera una representación abstracta independiente de la máquina (ej. Código de 3 direcciones).</td>
-                            </tr>
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">5. Optimización</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">Código IR</td>
-                                <td class="px-6 py-4 text-blue-600 dark:text-blue-400 font-mono text-xs">IR Optimizado</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Mejora el rendimiento eliminando código muerto y reduciendo operaciones costosas.</td>
-                            </tr>
-                            <tr class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">6. Cód. Objeto</td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">IR Optimizado</td>
-                                <td class="px-6 py-4 text-slate-900 dark:text-white font-mono text-xs font-bold">Binario / ASM</td>
-                                <td class="px-6 py-4 text-slate-600 dark:text-slate-300">Traduce el código intermedio al lenguaje máquina específico del procesador.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-20">
-            <div class="text-center mb-8">
-                <span class="text-emerald-500 font-bold tracking-widest uppercase text-xs">Herramienta Interactiva</span>
-                <h2 class="text-3xl font-bold text-slate-900 dark:text-white mt-2">Scanner Léxico</h2>
-            </div>
+        <article class="flex-1 px-8 py-12 lg:px-16 prose dark:prose-invert prose-lg max-w-none prose-blue">
+            <h1 class="text-4xl font-bold text-blue-700 dark:text-blue-400 mb-6">I. Teoría de Lenguajes Formales</h1>
+            <p class="lead">Esta disciplina es la rama de las matemáticas y la informática teórica que se ocupa de la sintaxis y la estructura de los lenguajes, definidos no por su significado (semántica), sino por su formación estricta (sintaxis).</p>
             
-            <div class="bg-slate-900 rounded-xl shadow-2xl overflow-hidden max-w-6xl mx-auto border border-slate-700">
-                <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span class="text-xs text-slate-400 font-mono">main.c — Tokenizer Preview</span>
+            <h3 class="mt-8">1. Definiciones Fundamentales</h3>
+            <p>Para definir un lenguaje formal, primero debemos establecer los objetos matemáticos base:</p>
+            <ul class="list-disc pl-5 space-y-2">
+                <li><strong>Alfabeto ($\Sigma$):</strong> Conjunto finito y no vacío de símbolos.<br>
+                    <em>Ejemplo:</em> $\Sigma = \{0, 1\}$ (binario) o $\Sigma = \{a, b, c, \dots, z\}$.
+                </li>
+                <li><strong>Cadena (String, $w$):</strong> Secuencia finita de símbolos pertenecientes a $\Sigma$. La longitud de la cadena se denota como $|w|$.</li>
+                <li><strong>Cadena vacía ($\epsilon$ o $\lambda$):</strong> Una cadena de longitud 0.</li>
+                <li><strong>Universo del Discurso ($\Sigma^*$):</strong> El conjunto de todas las cadenas posibles (infinitas) que se pueden formar con los símbolos de $\Sigma$, incluyendo la cadena vacía.</li>
+                <li><strong>Lenguaje Formal ($L$):</strong> Un subconjunto de $\Sigma^*$. Es decir, $L \subseteq \Sigma^*$. Un lenguaje es simplemente un conjunto de cadenas seleccionadas bajo un criterio específico.</li>
+            </ul>
+
+            <h3 class="mt-8">2. Gramáticas Generativas</h3>
+            <p>Un lenguaje formal se describe mediante una Gramática Formal. Matemáticamente, una gramática es una cuádrupla $G = (N, T, P, S)$ donde:</p>
+            <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border-l-4 border-blue-500">
+                <ul class="list-none space-y-2 m-0 p-0">
+                    <li><strong>$N$ (No terminales):</strong> Símbolos auxiliares que representan estados intermedios (ej. &lt;frase&gt;, &lt;verbo&gt;).</li>
+                    <li><strong>$T$ (Terminales):</strong> Símbolos finales que forman las cadenas del lenguaje (el alfabeto $\Sigma$).</li>
+                    <li><strong>$P$ (Reglas de Producción):</strong> Un conjunto finito de reglas de reescritura de la forma $\alpha \rightarrow \beta$, donde $\alpha$ y $\beta$ son cadenas de símbolos de $N \cup T$.</li>
+                    <li><strong>$S$ (Símbolo Inicial):</strong> El no terminal distinguido del cual comienza toda derivación.</li>
+                </ul>
+            </div>
+
+            <h3 class="mt-8">3. La Jerarquía de Chomsky</h3>
+            <p>Noam Chomsky clasificó las gramáticas en cuatro niveles, según las restricciones impuestas a sus reglas de producción ($P$). Cada nivel contiene al anterior ($Tipo \ 3 \subset Tipo \ 2 \subset Tipo \ 1 \subset Tipo \ 0$).</p>
+            
+            <div class="space-y-6 mt-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-0">Tipo 3: Gramáticas Regulares</h4>
+                    <p><strong>Restricción:</strong> Las reglas deben ser de la forma $A \rightarrow a$ o $A \rightarrow aB$ (lineal por la derecha) o $A \rightarrow Ba$ (lineal por la izquierda).</p>
+                    <p class="text-slate-600 dark:text-slate-400"><strong>Aplicación:</strong> Análisis léxico, expresiones regulares, búsqueda de patrones.</p>
                 </div>
 
-                <div class="grid lg:grid-cols-3">
-                    
-                    <div class="col-span-2 p-6 md:p-8 border-r border-slate-700">
-                        <div class="flex flex-col gap-4 mb-8">
-                            <label class="text-slate-400 text-xs font-bold uppercase">Entrada de Código</label>
-                            <div class="flex gap-4">
-                                <div class="flex-grow relative">
-                                    <span class="absolute left-0 top-2 text-emerald-500 font-mono text-lg font-bold">~ $</span>
-                                    <input type="text" id="compiler-input" value="if (x <= 10) return;" class="w-full bg-transparent border-b-2 border-slate-700 text-white font-mono text-lg pl-10 py-2 focus:outline-none focus:border-emerald-500 transition placeholder-slate-600" spellcheck="false">
-                                </div>
-                                <button onclick="tokenize()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg shadow-emerald-900/50 transition">
-                                    Analizar
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="border-t border-slate-700 pt-6">
-                            <p class="text-slate-500 text-xs uppercase font-bold tracking-wider mb-4">Salida (Stream de Tokens):</p>
-                            <div id="token-output" class="flex flex-wrap gap-3 min-h-[60px]"></div>
-                        </div>
-                    </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-0">Tipo 2: Gramáticas Libres de Contexto (GLC)</h4>
+                    <p><strong>Restricción:</strong> La parte izquierda de la regla debe ser un único no terminal ($A \rightarrow \gamma$). La sustitución de $A$ no depende de qué símbolos la rodeen.</p>
+                    <p class="text-slate-600 dark:text-slate-400"><strong>Aplicación:</strong> Sintaxis de lenguajes de programación (anidamiento, paréntesis, estructuras de control).</p>
+                </div>
 
-                    <div class="col-span-1 bg-slate-800/50 p-6">
-                        <h4 class="text-white text-sm font-bold uppercase mb-4 flex items-center gap-2">
-                            <i data-lucide="info" class="w-4 h-4 text-emerald-400"></i> Caracteres Válidos
-                        </h4>
-                        <div class="overflow-y-auto max-h-[250px] custom-scroll pr-2">
-                            <table class="w-full text-xs text-left">
-                                <thead class="text-slate-500 border-b border-slate-700">
-                                    <tr>
-                                        <th class="py-2">Token</th>
-                                        <th class="py-2">Patrones Reconocidos</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-slate-300 divide-y divide-slate-700 font-mono">
-                                    <tr>
-                                        <td class="py-2 text-purple-400 font-bold">KEYWORD</td>
-                                        <td class="py-2">int, float, return, if, else, void</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2 text-orange-400 font-bold">NUMBER</td>
-                                        <td class="py-2">0-9 (Dígitos)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2 text-slate-400 font-bold">OPERATOR</td>
-                                        <td class="py-2">=, +, -, *, /</td>
-                                    </tr>
-                                    <tr class="bg-emerald-900/20">
-                                        <td class="py-2 text-emerald-400 font-bold">COMPARISON</td>
-                                        <td class="py-2">&lt;, &gt;, &lt;=, &gt;=, ==</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2 text-gray-400 font-bold">SYMBOL</td>
-                                        <td class="py-2">; { } ( ) [ ]</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="py-2 text-blue-400 font-bold">ID</td>
-                                        <td class="py-2">Letras (a-z), Guion bajo (_)</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-0">Tipo 1: Gramáticas Sensibles al Contexto</h4>
+                    <p><strong>Restricción:</strong> Reglas de la forma $\alpha A \beta \rightarrow \alpha \gamma \beta$, donde $|\gamma| \geq |A|$. El contexto ($\alpha$ y $\beta$) importa.</p>
+                    <p class="text-slate-600 dark:text-slate-400"><strong>Aplicación:</strong> Procesamiento de lenguaje natural, ciertas restricciones semánticas.</p>
+                </div>
 
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-0">Tipo 0: Gramáticas Irrestrictas</h4>
+                    <p><strong>Restricción:</strong> Ninguna. $\alpha \rightarrow \beta$ (siempre que $\alpha$ no sea vacío).</p>
+                    <p class="text-slate-600 dark:text-slate-400"><strong>Aplicación:</strong> Representan cualquier cálculo computable por una máquina.</p>
                 </div>
             </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 text-center">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="mb-4"><i data-lucide="cpu" class="w-8 h-8 mx-auto text-slate-300 dark:text-slate-700"></i></div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Proyecto de Ingeniería en Sistemas &copy; 2025.</p>
-        </div>
-    </footer>
-
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'base' });
-    </script>
+        </article>
+    </div>
 
     <script>
         lucide.createIcons();
-        
-        // Theme Toggle
         const themeToggleBtn = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
-        function updateTheme() {
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                htmlElement.classList.add('dark');
-            } else { htmlElement.classList.remove('dark'); }
-        }
-        updateTheme();
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
         themeToggleBtn.addEventListener('click', () => {
             htmlElement.classList.toggle('dark');
             localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
         });
-
-        // DFA Logic
-        const dfaStateMap = { 'q0': { '0': 'q1', '1': 'q0' }, 'q1': { '0': 'q0', '1': 'q1' } };
-        async function runDFA() {
-            const input = document.getElementById('dfa-input').value;
-            const resultEl = document.getElementById('dfa-result');
-            if(!input) return;
-            resultEl.innerHTML = '<span class="flex items-center gap-2"><i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Procesando...</span>';
-            resultEl.className = "h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 transition-all";
-            lucide.createIcons();
-            resetNodes();
-            let currentState = 'q0';
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-            for (let char of input) {
-                if (char !== '0' && char !== '1') {
-                    resultEl.textContent = `Error: Carácter '${char}' inválido.`;
-                    resultEl.className = "h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800";
-                    return;
-                }
-                highlightNode(currentState);
-                await delay(500); 
-                currentState = dfaStateMap[currentState][char];
-                resetNodes();
-                await delay(100);
-            }
-            highlightNode(currentState);
-            if (currentState === 'q1') {
-                resultEl.innerHTML = '<span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4"></i> CADENA ACEPTADA</span>';
-                resultEl.className = "h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-700 shadow-sm";
-            } else {
-                resultEl.innerHTML = '<span class="flex items-center gap-2"><i data-lucide="x-circle" class="w-4 h-4"></i> CADENA RECHAZADA</span>';
-                resultEl.className = "h-10 flex items-center justify-center text-sm font-bold rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-600";
-            }
-            lucide.createIcons();
-        }
-        function resetNodes() {
-            document.querySelectorAll('.transition-node').forEach(el => el.classList.remove('active-state'));
-            document.querySelectorAll('text[id^="text-"]').forEach(el => el.classList.remove('active-text'));
-        }
-        function highlightNode(stateId) {
-            document.getElementById(`node-${stateId}`).classList.add('active-state');
-            document.getElementById(`text-${stateId}`).classList.add('active-text');
-        }
-
-        // Tokenizer Logic
-        function tokenize() {
-            const input = document.getElementById('compiler-input').value;
-            const output = document.getElementById('token-output');
-            output.innerHTML = '';
-
-            const patterns = [
-                { type: 'KEYWORD', regex: /^(int|float|return|if|else|void)\b/, color: 'bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/50 dark:text-purple-300 dark:border-purple-700' },
-                { type: 'CMP', regex: /^(<=|>=|==|<|>)/, color: 'bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-700' },
-                { type: 'ID', regex: /^[a-zA-Z_][a-zA-Z0-9_]*/, color: 'bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/50 dark:text-blue-300 dark:border-blue-700' },
-                { type: 'NUMBER', regex: /^\d+/, color: 'bg-orange-100 text-orange-700 border-orange-300 dark:bg-orange-900/50 dark:text-orange-300 dark:border-orange-700' },
-                { type: 'OPERATOR', regex: /^(=|\+|-|\*|\/)/, color: 'bg-slate-200 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600' },
-                { type: 'SYMBOL', regex: /^(;|{|}|\[|\]|\(|\))/, color: 'bg-gray-100 text-gray-600 border-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600' }
-            ];
-
-            let remaining = input.trim();
-            while (remaining.length > 0) {
-                let matchFound = false;
-                if (remaining[0] === ' ') { remaining = remaining.slice(1); continue; }
-                for (let p of patterns) {
-                    const match = remaining.match(p.regex);
-                    if (match) {
-                        createTokenBadge(p.type, match[0], p.color);
-                        remaining = remaining.slice(match[0].length);
-                        matchFound = true;
-                        break;
-                    }
-                }
-                if (!matchFound) {
-                    createTokenBadge('ERR', remaining[0], 'bg-red-100 text-red-700 border-red-300 dark:bg-red-900/50 dark:text-red-300 dark:border-red-700 animate-pulse');
-                    remaining = remaining.slice(1);
-                }
-            }
-        }
-
-        function createTokenBadge(type, value, classes) {
-            const output = document.getElementById('token-output');
-            const div = document.createElement('div');
-            div.className = `token-box px-3 py-2 rounded-md border text-sm font-mono font-bold flex flex-col items-center justify-center min-w-[50px] shadow-sm select-none cursor-default ${classes}`;
-            div.innerHTML = `<span>${value}</span><span class="text-[9px] opacity-70 font-sans mt-0.5 uppercase tracking-wider">${type}</span>`;
-            output.appendChild(div);
-        }
-
-        window.onload = function() {
-            highlightNode('q0');
-            tokenize();
-        };
     </script>
 </body>
+</html>
 </html>
