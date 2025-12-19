@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teoría: Autómatas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> tailwind.config = { darkMode: 'class' } </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:text-purple-600 transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
+            </a>
+            <span class="font-bold text-lg text-purple-600 dark:text-purple-400">II. Autómatas</span>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+        </div>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
+        
+        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
+            <nav class="space-y-2">
+                <a href="lenguajes.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Lenguajes</span>
+                </a>
+                <a href="automatas.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                    <span>Autómatas</span>
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                </a>
+                <a href="compiladores.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Compiladores</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+                <option value="lenguajes.html">I. Lenguajes Formales</option>
+                <option value="automatas.html" selected>II. Teoría de Autómatas (Actual)</option>
+                <option value="compiladores.html">III. Compiladores</option>
+            </select>
+        </div>
+
+        <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-purple">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">II. Teoría de Autómatas</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Un autómata es un modelo matemático de un sistema computacional que procesa una entrada y produce una salida (generalmente aceptación o rechazo).</p>
+
+            <hr class="border-slate-200 dark:border-slate-800 my-10">
+
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white">1. Autómatas Finitos (AF)</h3>
+            <p>Modelan sistemas con memoria finita (Tipo 3). Definidos por la quíntupla $M = (Q, \Sigma, \delta, q_0, F)$.</p>
+            
+            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-2">Ejemplo: DFA simple</p>
+                <div class="mermaid">
+                    stateDiagram-v2
+                        direction LR
+                        [*] --> q0
+                        q0 --> q1 : a
+                        q1 --> q0 : b
+                        q1 --> [*]
+                </div>
+            </div>
+
+            <ul class="list-disc pl-5 space-y-2">
+                <li><strong>Determinista (DFA):</strong> Una sola transición por símbolo. Eficiente.</li>
+                <li><strong>No Determinista (NFA):</strong> Múltiples caminos posibles. Todo NFA es convertible a DFA.</li>
+            </ul>
+
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">2. Autómatas de Pila (PDA)</h3>
+            <p>Para lenguajes Libres de Contexto (Tipo 2). Utiliza una estructura LIFO (Stack) para "recordar" estados previos infinitamente, permitiendo el anidamiento.</p>
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 border-l-4 border-yellow-400 text-sm">
+                <strong>Clave:</strong> Un PDA es esencialmente un <em>Autómata Finito + Memoria Auxiliar (Pila)</em>.
+            </div>
+
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">3. Máquinas de Turing (MT)</h3>
+            <p>El modelo más potente (Tipo 0). Posee una cinta infinita de lectura/escritura.</p>
+
+            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center">
+                <div class="flex gap-1 mb-2">
+                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono text-slate-400">...</div>
+                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">0</div>
+                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">1</div>
+                    <div class="w-10 h-10 border-4 border-purple-500 flex items-center justify-center font-bold bg-purple-100 dark:bg-purple-900/50">1</div>
+                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">0</div>
+                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono text-slate-400">...</div>
+                </div>
+                <div class="text-center">
+                    <i data-lucide="arrow-up" class="w-6 h-6 text-purple-600 mx-auto"></i>
+                    <span class="text-xs font-bold uppercase text-purple-600">Cabeza Lectora (R/W)</span>
+                </div>
+                <div class="mt-4 p-3 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">
+                    Control Finito (Estados)
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <div class="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl">
+                    <h4 class="font-bold text-slate-900 dark:text-white">Tesis Church-Turing</h4>
+                    <p class="text-sm mt-2">Cualquier algoritmo lógico es ejecutable por una MT.</p>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-xl">
+                    <h4 class="font-bold text-red-700 dark:text-red-400">Problema de la Parada</h4>
+                    <p class="text-sm mt-2">Es indecidible saber si una MT se detendrá para cualquier entrada.</p>
+                </div>
+            </div>
+
+        </article>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>

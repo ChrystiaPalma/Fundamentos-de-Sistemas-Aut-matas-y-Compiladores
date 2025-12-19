@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teoría: Lenguajes Formales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> tailwind.config = { darkMode: 'class' } </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:text-blue-600 transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
+            </a>
+            <span class="font-bold text-lg text-blue-600 dark:text-blue-400">I. Lenguajes Formales</span>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+        </div>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
+        
+        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
+            <nav class="space-y-2">
+                <a href="lenguajes.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                    <span>Lenguajes</span>
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                </a>
+                <a href="automatas.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Autómatas</span>
+                </a>
+                <a href="compiladores.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Compiladores</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+                <option value="lenguajes.html" selected>I. Lenguajes Formales (Actual)</option>
+                <option value="automatas.html">II. Teoría de Autómatas</option>
+                <option value="compiladores.html">III. Compiladores</option>
+            </select>
+        </div>
+
+        <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-blue">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">I. Teoría de Lenguajes Formales</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Esta disciplina es la rama de las matemáticas y la informática teórica que se ocupa de la sintaxis y la estructura de los lenguajes, definidos no por su significado (semántica), sino por su formación estricta (sintaxis).</p>
+            
+            <hr class="border-slate-200 dark:border-slate-800 my-10">
+
+            <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white">
+                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">1</span>
+                Definiciones Fundamentales
+            </h3>
+            <p>Para definir un lenguaje formal, establecemos los objetos matemáticos base:</p>
+            
+            <div class="grid gap-4 mt-6 not-prose">
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg h-fit"><i data-lucide="type" class="text-blue-600 dark:text-blue-400 w-6 h-6"></i></div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Alfabeto ($\Sigma$)</h4>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Conjunto finito y no vacío de símbolos.<br><em>Ejemplo:</em> $\Sigma = \{0, 1\}$ (binario).</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg h-fit"><i data-lucide="align-left" class="text-purple-600 dark:text-purple-400 w-6 h-6"></i></div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Cadena ($w$) y Universo ($\Sigma^*$)</h4>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Secuencia finita de símbolos. $\Sigma^*$ es el conjunto de todas las cadenas posibles.</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-lg h-fit"><i data-lucide="braces" class="text-emerald-600 dark:text-emerald-400 w-6 h-6"></i></div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Lenguaje Formal ($L$)</h4>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Un subconjunto de $\Sigma^*$. Un lenguaje es simplemente un conjunto de cadenas válidas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
+                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">2</span>
+                Gramáticas Generativas
+            </h3>
+            <p>Una gramática es una cuádrupla $G = (N, T, P, S)$. Es el "motor" que genera las cadenas del lenguaje.</p>
+
+            <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
+                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">3</span>
+                La Jerarquía de Chomsky
+            </h3>
+            <p>Clasificación de gramáticas según sus restricciones. Cada nivel es más poderoso e incluye al anterior.</p>
+            
+            <div class="my-8 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-center">
+                <div class="mermaid">
+                    graph TD
+                    subgraph T0 [Tipo 0: Irrestrictas]
+                        direction TB
+                        subgraph T1 [Tipo 1: Sensibles al Contexto]
+                            subgraph T2 [Tipo 2: Libres de Contexto]
+                                subgraph T3 [Tipo 3: Regulares]
+                                    R[Regex / DFA]
+                                end
+                                GLC[Sintaxis Prog.]
+                            end
+                            GSC[Lenguaje Natural]
+                        end
+                        GI[Máquina Turing]
+                    end
+                    style T0 fill:#f8fafc,stroke:#94a3b8,stroke-dasharray: 5 5
+                    style T1 fill:#dbeafe,stroke:#3b82f6
+                    style T2 fill:#d1fae5,stroke:#10b981
+                    style T3 fill:#f3e8ff,stroke:#a855f7
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-800 border-b dark:border-slate-700">
+                            <th class="p-4 font-bold">Nivel</th>
+                            <th class="p-4 font-bold">Restricción</th>
+                            <th class="p-4 font-bold">Aplicación</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr>
+                            <td class="p-4 font-mono font-bold text-purple-600">Tipo 3 (Regular)</td>
+                            <td class="p-4">$A \rightarrow a$ o $A \rightarrow aB$</td>
+                            <td class="p-4">Regex, Análisis Léxico</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono font-bold text-emerald-600">Tipo 2 (GLC)</td>
+                            <td class="p-4">$A \rightarrow \gamma$</td>
+                            <td class="p-4">Sintaxis (Compiladores)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono font-bold text-blue-600">Tipo 1 (Sensible)</td>
+                            <td class="p-4">$\alpha A \beta \rightarrow \alpha \gamma \beta$</td>
+                            <td class="p-4">Lenguaje Natural</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-mono font-bold text-slate-500">Tipo 0 (Irrestricta)</td>
+                            <td class="p-4">Sin restricciones</td>
+                            <td class="p-4">Cómputo Universal (Turing)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        // Theme logic (reused)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>

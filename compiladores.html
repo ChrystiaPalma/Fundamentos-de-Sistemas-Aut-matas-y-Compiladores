@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teoría: Compiladores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> tailwind.config = { darkMode: 'class' } </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
+            <a href="index.html" class="flex items-center gap-2 hover:text-emerald-600 transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
+            </a>
+            <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">III. Compiladores</span>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+        </div>
+    </nav>
+
+    <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
+        
+        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
+            <nav class="space-y-2">
+                <a href="lenguajes.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Lenguajes</span>
+                </a>
+                <a href="automatas.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <span>Autómatas</span>
+                </a>
+                <a href="compiladores.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <span>Compiladores</span>
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+                <option value="lenguajes.html">I. Lenguajes Formales</option>
+                <option value="automatas.html">II. Teoría de Autómatas</option>
+                <option value="compiladores.html" selected>III. Compiladores (Actual)</option>
+            </select>
+        </div>
+
+        <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-emerald">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">III. Ingeniería de Compiladores</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Aplicación práctica que transforma código fuente (humano) a código máquina (hardware). Se divide en Análisis (Front-end) y Síntesis (Back-end).</p>
+            
+            <div class="my-10 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg flex justify-center">
+                <div class="mermaid">
+                    graph TD
+                    SRC[Código Fuente] --> LEX[1. Léxico / Scanner]
+                    LEX -->|Tokens| PAR[2. Sintáctico / Parser]
+                    PAR -->|AST| SEM[3. Semántico]
+                    SEM -->|AST Validado| IR[4. Código Intermedio]
+                    IR --> OPT[5. Optimización]
+                    OPT --> GEN[6. Código Objeto]
+                    GEN --> EXE[Ejecutable]
+                    
+                    style SRC fill:#fff,stroke:#333
+                    style LEX fill:#d1fae5,stroke:#059669
+                    style PAR fill:#d1fae5,stroke:#059669
+                    style SEM fill:#d1fae5,stroke:#059669
+                    style IR fill:#e0e7ff,stroke:#4f46e5
+                    style OPT fill:#e0e7ff,stroke:#4f46e5
+                    style GEN fill:#e0e7ff,stroke:#4f46e5
+                    style EXE fill:#333,stroke:#333,color:#fff
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 mt-12">
+                <div>
+                    <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-100 dark:border-emerald-900 pb-2 mb-4">
+                        Fase 1: Análisis (Front-end)
+                    </h3>
+                    <ul class="space-y-6 list-none pl-0">
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Análisis Léxico</strong>
+                            <span class="text-sm">Agrupa caracteres en Tokens usando Autómatas Finitos. Elimina espacios y comentarios.</span>
+                        </li>
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Análisis Sintáctico</strong>
+                            <span class="text-sm">Valida la gramática y crea el Árbol de Sintaxis Abstracta (AST). Usa gramáticas Libres de Contexto.</span>
+                        </li>
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Análisis Semántico</strong>
+                            <span class="text-sm">Valida tipos y scopes usando la <em>Tabla de Símbolos</em>.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-100 dark:border-blue-900 pb-2 mb-4">
+                        Fase 2: Síntesis (Back-end)
+                    </h3>
+                    <ul class="space-y-6 list-none pl-0">
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Código Intermedio (IR)</strong>
+                            <span class="text-sm">Representación abstracta agnóstica de la máquina (ej. Bytecode).</span>
+                        </li>
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Optimización</strong>
+                            <span class="text-sm">Mejora velocidad y tamaño (eliminar código muerto, unroll loops).</span>
+                        </li>
+                        <li class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                            <strong class="text-slate-900 dark:text-white block mb-1">Generación Final</strong>
+                            <span class="text-sm">Traducción a Ensamblador o Binario específico (x86, ARM).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </article>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+    </script>
+</body>
+</html>
