@@ -8,9 +8,9 @@
     <script> tailwind.config = { darkMode: 'class' } </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="module">
-        import mermaid from './mermaid.js';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+</script>
     <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
