@@ -10,7 +10,7 @@
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        import mermaid from './mermaid.js';
         mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
     </script>
     <style> body { font-family: 'Inter', sans-serif; } </style>
@@ -49,14 +49,14 @@
         <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
             <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
                 <option value="lenguajes.html">I. Lenguajes Formales</option>
-                <option value="automatas.html" selected>II. Teoría de Autómatas (Actual)</option>
+                <option value="automatas.html" selected>II. Teoría de Autómatas</option>
                 <option value="compiladores.html">III. Compiladores</option>
             </select>
         </div>
 
         <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-purple">
             <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">II. Teoría de Autómatas</h1>
-            <p class="lead text-xl text-slate-500 dark:text-slate-400">Un autómata es un modelo matemático de un sistema computacional que procesa una entrada y produce una salida (generalmente aceptación o rechazo).</p>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Un autómata es un modelo matemático de un sistema computacional que procesa una entrada y produce una salida.</p>
 
             <hr class="border-slate-200 dark:border-slate-800 my-10">
 
@@ -64,46 +64,68 @@
             <p>Modelan sistemas con memoria finita (Tipo 3). Definidos por la quíntupla $M = (Q, \Sigma, \delta, q_0, F)$.</p>
             
             <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
-                <p class="text-xs font-bold uppercase text-slate-400 mb-2">Ejemplo: DFA simple</p>
+                <p class="text-xs font-bold uppercase text-slate-400 mb-2">DFA: Número Par de ceros</p>
                 <div class="mermaid">
                     stateDiagram-v2
                         direction LR
-                        [*] --> q0
-                        q0 --> q1 : a
-                        q1 --> q0 : b
-                        q1 --> [*]
+                        [*] --> Par
+                        Par --> Impar : 0
+                        Impar --> Par : 0
+                        Par --> Par : 1
+                        Impar --> Impar : 1
                 </div>
             </div>
 
             <ul class="list-disc pl-5 space-y-2">
-                <li><strong>Determinista (DFA):</strong> Una sola transición por símbolo. Eficiente.</li>
-                <li><strong>No Determinista (NFA):</strong> Múltiples caminos posibles. Todo NFA es convertible a DFA.</li>
+                <li><strong>Determinista (DFA):</strong> Una sola transición por símbolo. Eficiente para implementar en código.</li>
+                <li><strong>No Determinista (NFA):</strong> Múltiples caminos posibles o movimientos $\epsilon$. Útil para teoría y diseño inicial.</li>
             </ul>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">2. Autómatas de Pila (PDA)</h3>
-            <p>Para lenguajes Libres de Contexto (Tipo 2). Utiliza una estructura LIFO (Stack) para "recordar" estados previos infinitamente, permitiendo el anidamiento.</p>
-            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 border-l-4 border-yellow-400 text-sm">
-                <strong>Clave:</strong> Un PDA es esencialmente un <em>Autómata Finito + Memoria Auxiliar (Pila)</em>.
-            </div>
+            <p>Para lenguajes Libres de Contexto (Tipo 2). Utiliza una estructura LIFO (Stack) para "recordar" datos.</p>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">3. Máquinas de Turing (MT)</h3>
             <p>El modelo más potente (Tipo 0). Posee una cinta infinita de lectura/escritura.</p>
 
-            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col items-center">
-                <div class="flex gap-1 mb-2">
-                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono text-slate-400">...</div>
-                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">0</div>
-                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">1</div>
-                    <div class="w-10 h-10 border-4 border-purple-500 flex items-center justify-center font-bold bg-purple-100 dark:bg-purple-900/50">1</div>
-                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono">0</div>
-                    <div class="w-10 h-10 border border-slate-400 flex items-center justify-center font-mono text-slate-400">...</div>
-                </div>
-                <div class="text-center">
-                    <i data-lucide="arrow-up" class="w-6 h-6 text-purple-600 mx-auto"></i>
-                    <span class="text-xs font-bold uppercase text-purple-600">Cabeza Lectora (R/W)</span>
-                </div>
-                <div class="mt-4 p-3 bg-slate-100 dark:bg-slate-700 rounded text-xs font-mono">
-                    Control Finito (Estados)
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">4. Conversión NFA a DFA (Algoritmo de Subconjuntos)</h3>
+            <p>Dado que las computadoras son deterministas, todo NFA diseñado teóricamente debe convertirse a DFA para ejecutarse. El algoritmo crea estados que representan "conjuntos de estados" del NFA original.</p>
+            
+            <div class="bg-purple-50 dark:bg-purple-900/10 p-6 rounded-xl border-l-4 border-purple-500 my-4">
+                <h4 class="font-bold text-purple-800 dark:text-purple-300">¿Por qué crece el tamaño?</h4>
+                <p class="text-sm mt-2">
+                    Un NFA con $n$ estados podría resultar en un DFA con hasta $2^n$ estados en el peor caso. Esto se llama "explosión exponencial".
+                </p>
+            </div>
+
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">5. Minimización de Autómatas</h3>
+            <p>Tener estados redundantes consume memoria inútil. El algoritmo de minimización fusiona estados que son "indistinguibles" (se comportan igual ante cualquier entrada).</p>
+            
+            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="grid md:grid-cols-2 gap-8 items-center text-center">
+                    <div>
+                        <p class="text-xs font-bold uppercase text-red-500 mb-2">Antes (Redundante)</p>
+                        <div class="mermaid">
+                            stateDiagram-v2
+                                direction LR
+                                [*] --> A
+                                A --> B : 0
+                                A --> C : 1
+                                B --> D : 0
+                                C --> D : 0
+                                D --> [*]
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold uppercase text-green-500 mb-2">Después (Minimizado)</p>
+                        <div class="mermaid">
+                            stateDiagram-v2
+                                direction LR
+                                [*] --> AC
+                                AC --> BD : 0
+                                BD --> [*]
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">B y C eran equivalentes.</p>
+                    </div>
                 </div>
             </div>
 
