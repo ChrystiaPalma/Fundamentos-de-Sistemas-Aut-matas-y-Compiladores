@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta property="og:description" content="Teoría y visualización de autómatas finitos, pila y máquinas de Turing.">
+    <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teoría: Autómatas</title>
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { darkMode: 'class' } </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-</script>
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+<body
+    class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
     <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
@@ -24,30 +44,48 @@
                 <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
             </a>
             <span class="font-bold text-lg text-purple-600 dark:text-purple-400">II. Autómatas</span>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+
+            <!-- Toggle Switch -->
+            <button id="theme-toggle"
+                class="relative group w-16 h-9 flex items-center bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-500 focus:outline-none ring-2 ring-transparent focus:ring-purple-500"
+                aria-label="Cambiar tema">
+                <div
+                    class="w-7 h-7 bg-white dark:bg-slate-800 rounded-full shadow-md transform duration-500 ease-spring dark:translate-x-7 flex items-center justify-center relative overflow-hidden">
+                    <i data-lucide="sun"
+                        class="w-4 h-4 text-orange-400 absolute transition-all duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
+                    <i data-lucide="moon"
+                        class="w-4 h-4 text-purple-400 absolute transition-all duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
+                </div>
+            </button>
         </div>
     </nav>
 
     <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
-        
-        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+
+        <aside
+            class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
             <nav class="space-y-2">
-                <a href="lenguajes.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="lenguajes.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Lenguajes</span>
                 </a>
-                <a href="automatas.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                <a href="automatas.html"
+                    class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                     <span>Autómatas</span>
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                 </a>
-                <a href="compiladores.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="compiladores.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Compiladores</span>
                 </a>
             </nav>
         </aside>
 
-        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
-            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+        <div
+            class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;"
+                class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
                 <option value="lenguajes.html">I. Lenguajes Formales</option>
                 <option value="automatas.html" selected>II. Teoría de Autómatas</option>
                 <option value="compiladores.html">III. Compiladores</option>
@@ -55,74 +93,113 @@
         </div>
 
         <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-purple">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">II. Teoría de Autómatas</h1>
-            <p class="lead text-xl text-slate-500 dark:text-slate-400">Un autómata es un modelo matemático de un sistema computacional que procesa una entrada y produce una salida.</p>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">II.
+                Teoría de Autómatas</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Un autómata es un modelo matemático de un sistema
+                computacional que procesa una entrada y produce una salida.</p>
 
             <hr class="border-slate-200 dark:border-slate-800 my-10">
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white">1. Autómatas Finitos (AF)</h3>
-            <p>Modelan sistemas con memoria finita (Tipo 3). Definidos por la quíntupla $M = (Q, \Sigma, \delta, q_0, F)$.</p>
-            
-            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+            <p>Modelan sistemas con memoria finita (Tipo 3). Definidos por la quíntupla $M = (Q, \Sigma, \delta, q_0,
+                F)$.</p>
+
+            <div
+                class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
                 <p class="text-xs font-bold uppercase text-slate-400 mb-2">DFA: Número Par de ceros</p>
                 <div class="mermaid">
                     stateDiagram-v2
-                        direction LR
-                        [*] --> Par
-                        Par --> Impar : 0
-                        Impar --> Par : 0
-                        Par --> Par : 1
-                        Impar --> Impar : 1
+                    direction LR
+                    [*] --> Par
+                    Par --> Impar : 0
+                    Impar --> Par : 0
+                    Par --> Par : 1
+                    Impar --> Impar : 1
                 </div>
             </div>
 
             <ul class="list-disc pl-5 space-y-2">
-                <li><strong>Determinista (DFA):</strong> Una sola transición por símbolo. Eficiente para implementar en código.</li>
-                <li><strong>No Determinista (NFA):</strong> Múltiples caminos posibles o movimientos $\epsilon$. Útil para teoría y diseño inicial.</li>
+                <li><strong>Determinista (DFA):</strong> Una sola transición por símbolo. Eficiente para implementar en
+                    código.</li>
+                <li><strong>No Determinista (NFA):</strong> Múltiples caminos posibles o movimientos $\epsilon$. Útil
+                    para teoría y diseño inicial.</li>
             </ul>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">2. Autómatas de Pila (PDA)</h3>
-            <p>Para lenguajes Libres de Contexto (Tipo 2). Utiliza una estructura LIFO (Stack) para "recordar" datos.</p>
+            <p>Para lenguajes Libres de Contexto (Tipo 2). Utiliza una estructura LIFO (Stack) para "recordar" datos.
+            </p>
+
+            <div
+                class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-2">Ejemplo: Balanceo de Paréntesis</p>
+                <div class="mermaid">
+                    stateDiagram-v2
+                    direction LR
+                    [*] --> q0
+                    q0 --> q0 : ( / Push X
+                    q0 --> q1 : ) / Pop X
+                    q1 --> q1 : ) / Pop X
+                    q1 --> [*] : Pila Vacía
+                </div>
+            </div>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">3. Máquinas de Turing (MT)</h3>
             <p>El modelo más potente (Tipo 0). Posee una cinta infinita de lectura/escritura.</p>
 
-            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">4. Conversión NFA a DFA (Algoritmo de Subconjuntos)</h3>
-            <p>Dado que las computadoras son deterministas, todo NFA diseñado teóricamente debe convertirse a DFA para ejecutarse. El algoritmo crea estados que representan "conjuntos de estados" del NFA original.</p>
-            
+            <div
+                class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-2">Ejemplo: Inversor de Bits (0 ↔ 1)</p>
+                <div class="mermaid">
+                    stateDiagram-v2
+                    direction LR
+                    [*] --> q0
+                    q0 --> q1 : Leer 0 / Escribir 1, R
+                    q1 --> q0 : Leer 1 / Escribir 0, R
+                    q1 --> [*] : Fin de Cinta
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">4. Conversión NFA a DFA (Algoritmo de
+                Subconjuntos)</h3>
+            <p>Dado que las computadoras son deterministas, todo NFA diseñado teóricamente debe convertirse a DFA para
+                ejecutarse. El algoritmo crea estados que representan "conjuntos de estados" del NFA original.</p>
+
             <div class="bg-purple-50 dark:bg-purple-900/10 p-6 rounded-xl border-l-4 border-purple-500 my-4">
                 <h4 class="font-bold text-purple-800 dark:text-purple-300">¿Por qué crece el tamaño?</h4>
                 <p class="text-sm mt-2">
-                    Un NFA con $n$ estados podría resultar en un DFA con hasta $2^n$ estados en el peor caso. Esto se llama "explosión exponencial".
+                    Un NFA con $n$ estados podría resultar en un DFA con hasta $2^n$ estados en el peor caso. Esto se
+                    llama "explosión exponencial".
                 </p>
             </div>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">5. Minimización de Autómatas</h3>
-            <p>Tener estados redundantes consume memoria inútil. El algoritmo de minimización fusiona estados que son "indistinguibles" (se comportan igual ante cualquier entrada).</p>
-            
-            <div class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+            <p>Tener estados redundantes consume memoria inútil. El algoritmo de minimización fusiona estados que son
+                "indistinguibles" (se comportan igual ante cualquier entrada).</p>
+
+            <div
+                class="my-6 p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div class="grid md:grid-cols-2 gap-8 items-center text-center">
                     <div>
                         <p class="text-xs font-bold uppercase text-red-500 mb-2">Antes (Redundante)</p>
                         <div class="mermaid">
                             stateDiagram-v2
-                                direction LR
-                                [*] --> A
-                                A --> B : 0
-                                A --> C : 1
-                                B --> D : 0
-                                C --> D : 0
-                                D --> [*]
+                            direction LR
+                            [*] --> A
+                            A --> B : 0
+                            A --> C : 1
+                            B --> D : 0
+                            C --> D : 0
+                            D --> [*]
                         </div>
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase text-green-500 mb-2">Después (Minimizado)</p>
                         <div class="mermaid">
                             stateDiagram-v2
-                                direction LR
-                                [*] --> AC
-                                AC --> BD : 0
-                                BD --> [*]
+                            direction LR
+                            [*] --> AC
+                            AC --> BD : 0
+                            BD --> [*]
                         </div>
                         <p class="text-xs text-slate-500 mt-2">B y C eran equivalentes.</p>
                     </div>
@@ -145,13 +222,8 @@
 
     <script>
         lucide.createIcons();
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
-        themeToggleBtn.addEventListener('click', () => {
-            htmlElement.classList.toggle('dark');
-            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
-        });
     </script>
+    <script src="js/theme.js"></script>
 </body>
+
 </html>

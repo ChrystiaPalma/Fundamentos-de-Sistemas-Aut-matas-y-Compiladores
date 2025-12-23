@@ -1,0 +1,39 @@
+/* Soft Theme Transition */
+
+/* Apply transition only when the class is active to avoid initial load flash */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition-delay: 0s !important;
+}
+
+/* Base transitions for specific properties usually needing it */
+body {
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme Toggle Button Animation */
+#theme-toggle svg {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#theme-toggle:hover svg {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Switch Toggle Animation Basics */
+.toggle-checkbox:checked {
+    right: 0;
+    border-color: #68D391;
+}
+
+.toggle-checkbox:checked+.toggle-label {
+    background-color: #68D391;
+}
+
+/* Custom easing for the switch thumb */
+.ease-spring {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}

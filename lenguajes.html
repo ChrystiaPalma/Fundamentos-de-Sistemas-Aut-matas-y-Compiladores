@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teoría: Lenguajes Formales</title>
+    <meta property="og:description" content="Conceptos fundamentales de lenguajes formales y teoría de autómatas.">
+    <meta property="og:type" content="website">
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { darkMode: 'class' } </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };</script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-</script>
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+<body
+    class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
     <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
@@ -24,30 +42,47 @@
                 <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
             </a>
             <span class="font-bold text-lg text-blue-600 dark:text-blue-400">I. Lenguajes Formales</span>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+            <!-- Toggle Switch -->
+            <button id="theme-toggle"
+                class="relative group w-16 h-9 flex items-center bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-500 focus:outline-none ring-2 ring-transparent focus:ring-blue-500"
+                aria-label="Cambiar tema">
+                <div
+                    class="w-7 h-7 bg-white dark:bg-slate-800 rounded-full shadow-md transform duration-500 ease-spring dark:translate-x-7 flex items-center justify-center relative overflow-hidden">
+                    <i data-lucide="sun"
+                        class="w-4 h-4 text-orange-400 absolute transition-all duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
+                    <i data-lucide="moon"
+                        class="w-4 h-4 text-purple-400 absolute transition-all duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
+                </div>
+            </button>
         </div>
     </nav>
 
     <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
-        
-        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+
+        <aside
+            class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
             <nav class="space-y-2">
-                <a href="lenguajes.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                <a href="lenguajes.html"
+                    class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                     <span>Lenguajes</span>
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                 </a>
-                <a href="automatas.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="automatas.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Autómatas</span>
                 </a>
-                <a href="compiladores.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="compiladores.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Compiladores</span>
                 </a>
             </nav>
         </aside>
 
-        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
-            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+        <div
+            class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;"
+                class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
                 <option value="lenguajes.html" selected>I. Lenguajes Formales</option>
                 <option value="automatas.html">II. Teoría de Autómatas</option>
                 <option value="compiladores.html">III. Compiladores</option>
@@ -55,66 +90,83 @@
         </div>
 
         <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-blue">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">I. Teoría de Lenguajes Formales</h1>
-            <p class="lead text-xl text-slate-500 dark:text-slate-400">Rama matemática que estudia la sintaxis y estructura estricta de los lenguajes, base de toda la computación moderna.</p>
-            
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">I. Teoría
+                de Lenguajes Formales</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Rama matemática que estudia la sintaxis y
+                estructura estricta de los lenguajes, base de toda la computación moderna.</p>
+
             <hr class="border-slate-200 dark:border-slate-800 my-10">
 
             <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white">
-                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">1</span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">1</span>
                 Definiciones Fundamentales
             </h3>
             <div class="grid gap-4 mt-6 not-prose">
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
-                    <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg h-fit"><i data-lucide="type" class="text-blue-600 dark:text-blue-400 w-6 h-6"></i></div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-lg h-fit"><i data-lucide="type"
+                            class="text-blue-600 dark:text-blue-400 w-6 h-6"></i></div>
                     <div>
                         <h4 class="font-bold text-lg text-slate-900 dark:text-white">Alfabeto ($\Sigma$)</h4>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Conjunto finito de símbolos base.<br><em>Ejemplo:</em> $\Sigma = \{0, 1\}$ (binario).</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Conjunto finito de símbolos
+                            base.<br><em>Ejemplo:</em> $\Sigma = \{0, 1\}$ (binario).</p>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
-                    <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg h-fit"><i data-lucide="align-left" class="text-purple-600 dark:text-purple-400 w-6 h-6"></i></div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-purple-100 dark:bg-purple-900/30 p-3 rounded-lg h-fit"><i data-lucide="align-left"
+                            class="text-purple-600 dark:text-purple-400 w-6 h-6"></i></div>
                     <div>
-                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Cadena ($w$) y Universo ($\Sigma^*$)</h4>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Secuencia de símbolos. $\Sigma^*$ es el conjunto infinito de todas las combinaciones posibles.</p>
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Cadena ($w$) y Universo
+                            ($\Sigma^*$)</h4>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Secuencia de símbolos. $\Sigma^*$ es
+                            el conjunto infinito de todas las combinaciones posibles.</p>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
-                    <div class="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-lg h-fit"><i data-lucide="braces" class="text-emerald-600 dark:text-emerald-400 w-6 h-6"></i></div>
+                <div
+                    class="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex gap-4">
+                    <div class="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-lg h-fit"><i data-lucide="braces"
+                            class="text-emerald-600 dark:text-emerald-400 w-6 h-6"></i></div>
                     <div>
                         <h4 class="font-bold text-lg text-slate-900 dark:text-white">Lenguaje Formal ($L$)</h4>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Un subconjunto específico de $\Sigma^*$. Es un conjunto de cadenas seleccionadas.</p>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Un subconjunto específico de
+                            $\Sigma^*$. Es un conjunto de cadenas seleccionadas.</p>
                     </div>
                 </div>
             </div>
 
             <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
-                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">2</span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">2</span>
                 Gramáticas Generativas
             </h3>
             <p>Una gramática es una cuádrupla $G = (N, T, P, S)$. Es el "motor" que genera las cadenas del lenguaje.</p>
 
             <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
-                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">3</span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">3</span>
                 La Jerarquía de Chomsky
             </h3>
-            <p>Clasificación de gramáticas según sus restricciones. Cada nivel es más poderoso e incluye al anterior.</p>
-            
-            <div class="my-8 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-center">
+            <p>Clasificación de gramáticas según sus restricciones. Cada nivel es más poderoso e incluye al anterior.
+            </p>
+
+            <div
+                class="my-8 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex justify-center">
                 <div class="mermaid">
                     graph TD
                     subgraph T0 [Tipo 0: Irrestrictas]
-                        direction TB
-                        subgraph T1 [Tipo 1: Sensibles al Contexto]
-                            subgraph T2 [Tipo 2: Libres de Contexto]
-                                subgraph T3 [Tipo 3: Regulares]
-                                    R[Regex / DFA]
-                                end
-                                GLC[Sintaxis Prog.]
-                            end
-                            GSC[Lenguaje Natural]
-                        end
-                        GI[Máquina Turing]
+                    direction TB
+                    subgraph T1 [Tipo 1: Sensibles al Contexto]
+                    subgraph T2 [Tipo 2: Libres de Contexto]
+                    subgraph T3 [Tipo 3: Regulares]
+                    R[Regex / DFA]
+                    end
+                    GLC[Sintaxis Prog.]
+                    end
+                    GSC[Lenguaje Natural]
+                    end
+                    GI[Máquina Turing]
                     end
                     style T0 fill:#f8fafc,stroke:#94a3b8,stroke-dasharray: 5 5
                     style T1 fill:#dbeafe,stroke:#3b82f6
@@ -124,11 +176,13 @@
             </div>
 
             <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
-                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">4</span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">4</span>
                 Operaciones con Lenguajes
             </h3>
-            <p>Al igual que con los números, podemos operar con lenguajes enteros para crear nuevos conjuntos de cadenas.</p>
-            
+            <p>Al igual que con los números, podemos operar con lenguajes enteros para crear nuevos conjuntos de
+                cadenas.</p>
+
             <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 mt-6">
                 <table class="w-full text-left text-sm">
                     <thead class="bg-slate-100 dark:bg-slate-800">
@@ -147,52 +201,62 @@
                         <tr>
                             <td class="p-4 font-bold text-purple-600">Concatenación</td>
                             <td class="p-4">$L_1 \cdot L_2$</td>
-                            <td class="p-4">Cadenas formadas por una parte de $L_1$ seguida inmediatamente de una de $L_2$.</td>
+                            <td class="p-4">Cadenas formadas por una parte de $L_1$ seguida inmediatamente de una de
+                                $L_2$.</td>
                         </tr>
                         <tr>
                             <td class="p-4 font-bold text-emerald-600">Cerradura de Kleene</td>
                             <td class="p-4">$L^*$</td>
-                            <td class="p-4">Cero o más concatenaciones de cadenas de $L$. Incluye siempre $\epsilon$.</td>
+                            <td class="p-4">Cero o más concatenaciones de cadenas de $L$. Incluye siempre $\epsilon$.
+                            </td>
                         </tr>
                         <tr>
                             <td class="p-4 font-bold text-orange-600">Cerradura Positiva</td>
                             <td class="p-4">$L^+$</td>
-                            <td class="p-4">Una o más concatenaciones ($L^+ = L \cdot L^*$). Excluye $\epsilon$ (si $L$ no lo tenía).</td>
+                            <td class="p-4">Una o más concatenaciones ($L^+ = L \cdot L^*$). Excluye $\epsilon$ (si $L$
+                                no lo tenía).</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <h3 class="flex items-center gap-3 text-2xl font-bold text-slate-800 dark:text-white mt-12">
-                <span class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">5</span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded bg-blue-100 text-blue-600 text-sm">5</span>
                 Ambigüedad Gramatical
             </h3>
-            <p>Un problema crítico en compiladores. Una gramática es ambigua si existe una cadena que puede tener <strong>más de un árbol de derivación</strong> diferente.</p>
-            
+            <p>Un problema crítico en compiladores. Una gramática es ambigua si existe una cadena que puede tener
+                <strong>más de un árbol de derivación</strong> diferente.
+            </p>
+
             <div class="bg-red-50 dark:bg-red-900/10 border-l-4 border-red-500 p-6 rounded-r-xl my-6">
                 <h4 class="text-red-700 dark:text-red-400 font-bold text-lg">¿Por qué es malo?</h4>
                 <p class="text-slate-700 dark:text-slate-300 text-sm mt-2">
-                    Si escribes <code>3 + 4 * 5</code>, el compilador debe saber si agrupar <code>(3+4)*5</code> o <code>3+(4*5)</code>. Una gramática ambigua confunde al compilador, lo cual es inaceptable en programación.
+                    Si escribes <code>3 + 4 * 5</code>, el compilador debe saber si agrupar <code>(3+4)*5</code> o
+                    <code>3+(4*5)</code>. Una gramática ambigua confunde al compilador, lo cual es inaceptable en
+                    programación.
                 </p>
             </div>
 
-            <div class="p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
-                <p class="text-xs font-bold uppercase text-slate-400 mb-4">Ejemplo: Dos árboles para la misma expresión "id + id * id"</p>
+            <div
+                class="p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                <p class="text-xs font-bold uppercase text-slate-400 mb-4">Ejemplo: Dos árboles para la misma expresión
+                    "id + id * id"</p>
                 <div class="mermaid">
                     graph TD
                     subgraph Arbol_Incorrecto
-                        E1[E] --> E2[E] & PLUS1[+] & E3[E]
-                        E2 --> ID1[id]
-                        E3 --> E4[E] & MUL1[*] & E5[E]
-                        E4 --> ID2[id]
-                        E5 --> ID3[id]
+                    E1[E] --> E2[E] & PLUS1[+] & E3[E]
+                    E2 --> ID1[id]
+                    E3 --> E4[E] & MUL1[*] & E5[E]
+                    E4 --> ID2[id]
+                    E5 --> ID3[id]
                     end
                     subgraph Arbol_Correcto
-                        X1[E] --> X2[E] & MUL2[*] & X3[E]
-                        X2 --> X4[E] & PLUS2[+] & X5[E]
-                        X4 --> ID4[id]
-                        X5 --> ID5[id]
-                        X3 --> ID6[id]
+                    X1[E] --> X2[E] & MUL2[*] & X3[E]
+                    X2 --> X4[E] & PLUS2[+] & X5[E]
+                    X4 --> ID4[id]
+                    X5 --> ID5[id]
+                    X3 --> ID6[id]
                     end
                 </div>
             </div>
@@ -202,13 +266,8 @@
 
     <script>
         lucide.createIcons();
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
-        themeToggleBtn.addEventListener('click', () => {
-            htmlElement.classList.toggle('dark');
-            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
-        });
     </script>
+    <script src="js/theme.js"></script>
 </body>
+
 </html>

@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+    <meta property="og:description" content="Teoría de compiladores, análisis léxico y sintáctico.">
+    <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teoría: Compiladores</title>
+
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script> tailwind.config = { darkMode: 'class' } </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-</script>
-    <style> body { font-family: 'Inter', sans-serif; } </style>
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <link rel="stylesheet" href="css/theme.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+<body
+    class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
 
     <nav class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
@@ -22,30 +40,47 @@
                 <span class="font-bold text-sm hidden sm:inline">Dashboard</span>
             </a>
             <span class="font-bold text-lg text-emerald-600 dark:text-emerald-400">III. Compiladores</span>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><i data-lucide="sun" class="hidden dark:block"></i><i data-lucide="moon" class="block dark:hidden"></i></button>
+            <!-- Toggle Switch -->
+            <button id="theme-toggle"
+                class="relative group w-16 h-9 flex items-center bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-500 focus:outline-none ring-2 ring-transparent focus:ring-emerald-500"
+                aria-label="Cambiar tema">
+                <div
+                    class="w-7 h-7 bg-white dark:bg-slate-800 rounded-full shadow-md transform duration-500 ease-spring dark:translate-x-7 flex items-center justify-center relative overflow-hidden">
+                    <i data-lucide="sun"
+                        class="w-4 h-4 text-orange-400 absolute transition-all duration-500 scale-100 rotate-0 dark:scale-0 dark:rotate-90"></i>
+                    <i data-lucide="moon"
+                        class="w-4 h-4 text-purple-400 absolute transition-all duration-500 scale-0 -rotate-90 dark:scale-100 dark:rotate-0"></i>
+                </div>
+            </button>
         </div>
     </nav>
 
     <div class="flex flex-col lg:flex-row max-w-7xl mx-auto w-full flex-grow">
-        
-        <aside class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
+
+        <aside
+            class="hidden lg:block lg:w-72 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 border-r border-slate-200 dark:border-slate-800 p-8 bg-white dark:bg-slate-950">
             <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-6">Índice del Curso</h4>
             <nav class="space-y-2">
-                <a href="lenguajes.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="lenguajes.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Lenguajes</span>
                 </a>
-                <a href="automatas.html" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <a href="automatas.html"
+                    class="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                     <span>Autómatas</span>
                 </a>
-                <a href="compiladores.html" class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <a href="compiladores.html"
+                    class="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                     <span>Compiladores</span>
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                 </a>
             </nav>
         </aside>
 
-        <div class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
-            <select onchange="location = this.value;" class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
+        <div
+            class="lg:hidden p-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+            <select onchange="location = this.value;"
+                class="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-bold">
                 <option value="lenguajes.html">I. Lenguajes Formales</option>
                 <option value="automatas.html">II. Teoría de Autómatas</option>
                 <option value="compiladores.html" selected>III. Compiladores</option>
@@ -53,10 +88,13 @@
         </div>
 
         <article class="flex-1 px-6 py-12 lg:px-20 prose dark:prose-invert prose-lg max-w-none prose-emerald">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">III. Ingeniería de Compiladores</h1>
-            <p class="lead text-xl text-slate-500 dark:text-slate-400">Transformación de software desde el dominio humano al dominio de la máquina.</p>
-            
-            <div class="my-10 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg flex justify-center overflow-x-auto">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">III.
+                Ingeniería de Compiladores</h1>
+            <p class="lead text-xl text-slate-500 dark:text-slate-400">Transformación de software desde el dominio
+                humano al dominio de la máquina.</p>
+
+            <div
+                class="my-10 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg flex justify-center overflow-x-auto">
                 <div class="mermaid">
                     graph TD
                     SRC[Código Fuente] --> LEX[1. Léxico / Scanner]
@@ -66,7 +104,7 @@
                     IR --> OPT[5. Optimización]
                     OPT --> GEN[6. Código Objeto]
                     GEN --> EXE[Ejecutable / Binario]
-                    
+
                     style SRC fill:#fff,stroke:#333
                     style LEX fill:#d1fae5,stroke:#059669
                     style PAR fill:#d1fae5,stroke:#059669
@@ -80,7 +118,8 @@
 
             <div class="grid lg:grid-cols-2 gap-12 mt-12">
                 <div>
-                    <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-100 dark:border-emerald-900 pb-2 mb-4">
+                    <h3
+                        class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-100 dark:border-emerald-900 pb-2 mb-4">
                         Fase 1: Análisis (Front-end)
                     </h3>
                     <ul class="space-y-6 list-none pl-0">
@@ -95,12 +134,14 @@
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-100 dark:border-blue-900 pb-2 mb-4">
+                    <h3
+                        class="text-2xl font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-100 dark:border-blue-900 pb-2 mb-4">
                         Fase 2: Síntesis (Back-end)
                     </h3>
                     <ul class="space-y-6 list-none pl-0">
                         <li class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-lg border-l-4 border-blue-500">
-                            <strong class="text-slate-900 dark:text-white block mb-1 text-lg">4. Código Intermedio</strong>
+                            <strong class="text-slate-900 dark:text-white block mb-1 text-lg">4. Código
+                                Intermedio</strong>
                             <span class="text-sm">Código abstracto agnóstico (ej. Java Bytecode).</span>
                         </li>
                         <li class="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-lg border-l-4 border-blue-500">
@@ -113,9 +154,11 @@
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">La Tabla de Símbolos</h3>
             <p>Es la base de datos central del compilador. Almacena cada variable, función y clase encontrada.</p>
-            
-            <div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800 my-6">
-                <div class="bg-slate-100 dark:bg-slate-900 px-4 py-2 border-b border-slate-200 dark:border-slate-700 font-mono text-xs font-bold uppercase text-slate-500">
+
+            <div
+                class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm bg-white dark:bg-slate-800 my-6">
+                <div
+                    class="bg-slate-100 dark:bg-slate-900 px-4 py-2 border-b border-slate-200 dark:border-slate-700 font-mono text-xs font-bold uppercase text-slate-500">
                     Visualización de Memoria (Ejemplo)
                 </div>
                 <table class="w-full text-left text-sm font-mono">
@@ -128,28 +171,51 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y dark:divide-slate-700">
-                        <tr><td class="p-3">counter</td><td class="p-3">int</td><td class="p-3">Global</td><td class="p-3 text-slate-400">0x004F</td></tr>
-                        <tr><td class="p-3">calculate</td><td class="p-3">func</td><td class="p-3">Global</td><td class="p-3 text-slate-400">0x008A</td></tr>
-                        <tr><td class="p-3">temp_val</td><td class="p-3">float</td><td class="p-3">Local (main)</td><td class="p-3 text-slate-400">STACK+4</td></tr>
+                        <tr>
+                            <td class="p-3">counter</td>
+                            <td class="p-3">int</td>
+                            <td class="p-3">Global</td>
+                            <td class="p-3 text-slate-400">0x004F</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3">calculate</td>
+                            <td class="p-3">func</td>
+                            <td class="p-3">Global</td>
+                            <td class="p-3 text-slate-400">0x008A</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3">temp_val</td>
+                            <td class="p-3">float</td>
+                            <td class="p-3">Local (main)</td>
+                            <td class="p-3 text-slate-400">STACK+4</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-12">Manejo de Errores</h3>
-            <p>Un buen compilador no solo traduce, sino que diagnostica. Los errores pueden ocurrir en cualquier fase:</p>
-            
+            <p>Un buen compilador no solo traduce, sino que diagnostica. Los errores pueden ocurrir en cualquier fase:
+            </p>
+
             <div class="space-y-4 mt-6">
-                <div class="flex gap-4 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-100 dark:border-red-900/30">
+                <div
+                    class="flex gap-4 p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-100 dark:border-red-900/30">
                     <div class="font-bold text-red-600 w-24 shrink-0">Léxico</div>
-                    <div class="text-sm text-slate-700 dark:text-slate-300">Carácter inválido (ej. <code>@</code> en C++ fuera de string).</div>
+                    <div class="text-sm text-slate-700 dark:text-slate-300">Carácter inválido (ej. <code>@</code> en C++
+                        fuera de string).</div>
                 </div>
-                <div class="flex gap-4 p-4 bg-orange-50 dark:bg-orange-900/10 rounded-lg border border-orange-100 dark:border-orange-900/30">
+                <div
+                    class="flex gap-4 p-4 bg-orange-50 dark:bg-orange-900/10 rounded-lg border border-orange-100 dark:border-orange-900/30">
                     <div class="font-bold text-orange-600 w-24 shrink-0">Sintáctico</div>
-                    <div class="text-sm text-slate-700 dark:text-slate-300">Falta un punto y coma <code>;</code> o paréntesis desbalanceado.</div>
+                    <div class="text-sm text-slate-700 dark:text-slate-300">Falta un punto y coma <code>;</code> o
+                        paréntesis desbalanceado.</div>
                 </div>
-                <div class="flex gap-4 p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg border border-yellow-100 dark:border-yellow-900/30">
+                <div
+                    class="flex gap-4 p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-lg border border-yellow-100 dark:border-yellow-900/30">
                     <div class="font-bold text-yellow-600 w-24 shrink-0">Semántico</div>
-                    <div class="text-sm text-slate-700 dark:text-slate-300">Tipos incompatibles (ej. <code>int x = "hola"</code>).</div>
+                    <div class="text-sm text-slate-700 dark:text-slate-300">Tipos incompatibles (ej.
+                        <code>int x = "hola"</code>).
+                    </div>
                 </div>
             </div>
 
@@ -158,13 +224,8 @@
 
     <script>
         lucide.createIcons();
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) htmlElement.classList.add('dark');
-        themeToggleBtn.addEventListener('click', () => {
-            htmlElement.classList.toggle('dark');
-            localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
-        });
     </script>
+    <script src="js/theme.js"></script>
 </body>
+
 </html>
